@@ -8,7 +8,7 @@ composer require mrsuperli/oauth2-youku
 or require in a composer.json
 ```json
 "require": {
-	"mrsuperli/oauth2-youku": "~1.0"
+	"mrsuperli/oauth2-youku": "~1.1"
 }
 ```
 then run:
