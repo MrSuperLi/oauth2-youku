@@ -50,7 +50,7 @@ class YouKu extends AbstractProvider
 	 */
 	public function getResourceOwnerDetailsUrl (AccessToken $token)
 	{
-        $params = http_build_query([
+        $params = $this->buildQueryString([
             'client_id' => $this->clientId,
             'access_token' => $token->getToken()
         ]);
