@@ -18,7 +18,7 @@ composer update
 ##Useage
 ```php
 session_start();
-$provider = new \MrSuperli\OAuth2\Client\Provider\YouKu([
+$provider = new \MrSuperLi\OAuth2\Client\Provider\YouKu([
 	'clientId' => '{clientId}',
 	'clientSecret' => '{clientSecret}',
 	'redirectUri' => 'http://example.com/callback-url',
