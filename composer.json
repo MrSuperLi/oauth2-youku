@@ -1,0 +1,32 @@
+{
+    "name": "mrsuperli/oauth2-youku",
+    "type": "library",
+    "description": "YouKu OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MrSuperLi",
+            "email": "1140926800@qq.com",
+            "homepage": "http://worthly.cn"
+        }
+    ],
+    "homepage": "https://github.com/MrSuperLi/oauth2-youku",
+    "keywords": [
+      "oauth",
+      "oauth2",
+      "client",
+      "authorization",
+      "authorisation",
+      "YouKu",
+      "YouKu Login"
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "league/oauth2-client": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "MrSuperLi\\OAuth2\\Client\\Provider\\": "src/"
+        }
+    }
+}
