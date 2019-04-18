@@ -8,7 +8,7 @@ composer require mrsuperli/oauth2-youku
 or require in a composer.json
 ```json
 "require": {
-	"mrsuperli/oauth2-youku": "~1.1"
+	"mrsuperli/oauth2-youku": "~1.2"
 }
 ```
 then run:
@@ -35,6 +35,8 @@ if (!isset($_GET['code'])) {
 	$token = $provider->getAccessToken('authorization_code', [
 		'code' => $_GET['code']
 	]);
+	
+	$token = $provider->getAccessToken('refresh_token', ['refresh_token' => '{refresh_token}'])
 
 	//fetch userinfo returned by serverside
     $user = $provider->getResourceOwner($token);

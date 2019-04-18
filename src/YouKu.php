@@ -35,13 +35,8 @@ class YouKu extends AbstractProvider
 	 */
 	public function getBaseAccessTokenUrl (array $params)
 	{
-		return $this->domain . '/router/rest.json';
+	    return $this->domain . '/router/rest.json';
 	}
-
-	public function getRefreshTokenUrl()
-    {
-        return $this->domain . '/router/rest.json';
-    }
 
 	/**
 	 * Get provider url to fetch user details
@@ -74,7 +69,7 @@ class YouKu extends AbstractProvider
 		$grant = $this->verifyGrant($grant);
 
 		$params = [
-            'action' => 'youku.user.authorize.token.get',
+            'action' => '',
 			'client_id'     => $this->clientId,
             'format' => 'json',
             'timestamp' => time(),
@@ -82,70 +77,37 @@ class YouKu extends AbstractProvider
 		];
 
 		$params   = $grant->prepareRequestParameters($params, $options);
+
+		$body = [];
+
+		if ($params['grant_type'] === 'refresh_token') {
+            $body['refreshToken'] = $params['refreshToken'] = $params['refresh_token'];
+            unset($params['refresh_token']);
+            $params['action'] = 'youku.user.authorize.token.refresh';
+        } else {
+            $body['code'] = $params['code'];
+            $params['action'] = 'youku.user.authorize.token.get';
+
+        }
+
         unset($params['grant_type']);
+
 		$params['sign'] = $this->getSign($params);
-		$code = $params['code'];
-		unset($params['code']);
 
-        $params = [
-            'opensysparams' => json_encode($params),
-            'code' => $code
-        ];
+        unset($params['refreshToken']);
+        unset($params['code']);
 
-		$request  = $this->getAccessTokenRequest($params);
+        $body['opensysparams'] = json_encode($params);
+
+		$request  = $this->getAccessTokenRequest($body);
+		print_r($request);
 		$response = $this->getParsedResponse($request);
-
+        print_r($response);die;
 		$prepared = $this->prepareAccessTokenResponse($response);
 		$token    = $this->createAccessToken($prepared, $grant);
 
 		return $token;
 	}
-
-    /**
-     * @param $refreshToken
-     * @return mixed
-     * @throws IdentityProviderException
-     */
-	public function refreshToken($refreshToken)
-    {
-
-        if ($refreshToken instanceof AccessToken) {
-            $refreshToken = $refreshToken->getRefreshToken();
-        }
-
-        $params = [
-            'action' => 'youku.user.authorize.token.refresh',
-            'client_id'     => $this->clientId,
-            'format' => 'json',
-            'timestamp' => time(),
-            'version' => '3.0',
-            'refreshToken' => $refreshToken
-        ];
-
-        $params['sign'] = $this->getSign($params);
-        unset($params['refreshToken']);
-
-        $params = [
-            'opensysparams' => json_encode($params),
-            'refreshToken' => $refreshToken
-        ];
-
-        $request  = $this->getRequest(
-            'POST',
-            $this->getRefreshTokenUrl(),
-            [
-                'headers' => ['content-type' => 'application/x-www-form-urlencoded'],
-                'body' => $this->buildQueryString($params)
-            ]
-        );
-
-        $response = $this->getParsedResponse($request);
-
-        $prepared = $this->prepareAccessTokenResponse($response);
-        $token    = $this->createAccessToken($prepared, $this->verifyGrant('authorization_code'));
-
-        return $token;
-    }
 
 	/**
 	 * Check a provider response for errors.
