@@ -100,9 +100,9 @@ class YouKu extends AbstractProvider
         $body['opensysparams'] = json_encode($params);
 
 		$request  = $this->getAccessTokenRequest($body);
-		print_r($request);
+
 		$response = $this->getParsedResponse($request);
-        print_r($response);die;
+
 		$prepared = $this->prepareAccessTokenResponse($response);
 		$token    = $this->createAccessToken($prepared, $grant);
 
